@@ -25,5 +25,8 @@ neural network converges quicker to the minimum error.
 """
 
 NN = neuralnetwork.Neural_Network()
-yHAT = NN.forward(X)
-print("The errors on this training set are:  \n{}".format(np.subtract(yHAT, Y)))
+print("The cost function for this training set with random initial weights is: {}"
+      .format(NN.costFunction(X, Y)))
+dJdW1, dJdW2 = NN.costFunctionPrime(X, Y)
+print("The partial derivative of cost wrt W1 is \n {}".format(dJdW1))
+print("The partial derivative of cost wrt W2 is \n {}".format(dJdW2))
