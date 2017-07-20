@@ -42,3 +42,24 @@ class Neural_Network(object):
 
         return dJdW1, dJdW2
 
+    # Functions for interacting with other methods / classes
+
+    def getParams(self):
+        # Get all weights rolled into a single vector
+        params = np.concatenate((self.W1.ravel(), self.W2.ravel()))
+        return params
+
+    def setParams(self, params):
+        # Set W1 and W2 using single vector of parameters
+        W1_start = 0
+        W1_end = self.hiddenLayerSize * self.inputLayerSize
+        W2_end = W1_end + self.hiddenLayerSize * self.outputLayerSize
+        self.W1 = np.reshape(params[W1_start : W1_end],
+                             (self.inputLayerSize, self.hiddenLayerSize))
+        self.W2 = np.reshape(params[W1_end : W2_end],
+                             (self.hiddenLayerSize, self.outputLayerSize))
+
+    def getGradients(self, X, y):
+        dJdW1, dJdW2 = self.costFunctionPrime(X, y)
+        return np.concatenate((dJdW1.ravel(), dJdW2.ravel()))
+

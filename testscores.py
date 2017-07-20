@@ -4,6 +4,7 @@ This code follows the intro to neural networks video series at https://www.youtu
 
 import numpy as np
 import neuralnetwork
+import gradienttest
 
 X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
 Y = np.array(([75], [82], [93]), dtype=float)
@@ -28,5 +29,7 @@ NN = neuralnetwork.Neural_Network()
 print("The cost function for this training set with random initial weights is: {}"
       .format(NN.costFunction(X, Y)))
 dJdW1, dJdW2 = NN.costFunctionPrime(X, Y)
-print("The partial derivative of cost wrt W1 is \n {}".format(dJdW1))
-print("The partial derivative of cost wrt W2 is \n {}".format(dJdW2))
+
+analyticgrad = NN.getGradients(X, Y)
+numericgrad = gradienttest.computeNumericalGradient(NN, X, Y)
+print("The L2 error norm between these vectors is: {}.".format(np.linalg.norm(analyticgrad - numericgrad, 2)))
