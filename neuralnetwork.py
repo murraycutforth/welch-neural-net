@@ -1,6 +1,6 @@
 import numpy as np
 
-class Neural_Network(object):
+class Neural_Network():
     def __init__(self):
         # Define hyperparameters
         self.inputLayerSize = 2
