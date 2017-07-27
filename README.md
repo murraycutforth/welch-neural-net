@@ -5,6 +5,6 @@ The network is trained using batch gradient descent, calling the BFGS algorithm 
 ## Usage
 Run the file 'testscores.py'
 
-### Dependencies
+## Dependencies
 - Numpy
 - Scipy
