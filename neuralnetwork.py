@@ -63,3 +63,26 @@ class Neural_Network():
         dJdW1, dJdW2 = self.costFunctionPrime(X, y)
         return np.concatenate((dJdW1.ravel(), dJdW2.ravel()))
 
+
+class Regularised_Neural_Network(Neural_Network):
+
+    def __init__(self, Lambda):
+        super(Regularised_Neural_Network, self).__init__()
+        self.Lambda = Lambda
+
+    def costFunction(self, X, Y):
+        # Compute sum-squared errors on Y
+        return 0.5 * np.sum((Y - self.forward(X))**2)/X.shape[0] \
+               + 0.5 * self.Lambda * (np.sum(self.W1**2) + np.sum(self.W2**2))
+
+    def costFunctionPrime(self, X, Y):
+        # Compute partial derivatives of cost function wrt W1 and W2
+        yHAT = self.forward(X)
+
+        delta3 = np.multiply(yHAT - Y, self.sigmoidPrime(self.z3))
+        dJdW2 = np.dot(self.a2.T, delta3) + self.Lambda * self.W2
+
+        delta2 = np.dot(delta3, self.W2.T) * self.sigmoidPrime(self.z2)
+        dJdW1 = np.dot(X.T, delta2) + self.Lambda * self.W1
+
+        return dJdW1, dJdW2

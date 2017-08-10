@@ -16,14 +16,18 @@ class trainer():
         # Used to store the new cost after each iteration
         self.NN.setParams(params)
         self.J.append(self.NN.costFunction(self.X, self.y))
+        self.testJ.append(self.NN.costFunction(self.testX, self.testY))
 
-    def train(self, X, y):
+    def train(self, X, y, testX, testY):
         # Internal variable for callback function
         self.X = X
         self.y = y
+        self.testX = testX
+        self.testY = testY
 
         # Store costs in this list
         self.J = []
+        self.testJ = []
 
         params0 = self.NN.getParams()
         options = {'maxiter' : 200, 'disp' : True}

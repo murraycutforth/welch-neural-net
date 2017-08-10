@@ -8,8 +8,13 @@ import gradienttest
 import trainer
 from matplotlib import pyplot as plt
 
-X = np.array(([3, 5], [5, 1], [10, 2]), dtype=float)
-Y = np.array(([75], [82], [93]), dtype=float)
+# Training data
+X = np.array(([3, 5], [5, 1], [10, 2], [6, 1.5]), dtype=float)
+Y = np.array(([75], [82], [93], [70]), dtype=float)
+
+# Testing data
+testX = np.array(([4, 5.5], [4.5, 1], [9, 2.5], [6,2]), dtype=float)
+testY = np.array(([70], [89], [85], [75]), dtype=float)
 
 """
 The goal is to create a neural network which can predict the test score given
@@ -22,12 +27,25 @@ and outputs (test score).
 X = X / np.amax(X, axis=0)
 Y = Y / 100.0
 
+testX = testX / np.amax(X, axis=0)
+testY = testY / 100.0
+
 """
 The input and output data should be normalised. This is helpful for ensuring that the
 neural network converges quicker to the minimum error.
 """
 
+"""
+Next up we decide if we want to examine a neural network with or without
+a regularisation term to discourage overfitting:
+"""
+
+# Without regularisation
 NN = neuralnetwork.Neural_Network()
+
+# With regularisation
+# NN = neuralnetwork.Regularised_Neural_Network(0.0001)
+
 print("Constructed 3-layer, 6-node neural network with random initial synapse weights.")
 print("The cost function for this training set is initially: {}."
       .format(NN.costFunction(X, Y)))
@@ -47,15 +65,17 @@ Now we call the BFGS algorithm to train the network
 """
 print("Training network...")
 T = trainer.trainer(NN)
-T.train(X,Y)
+T.train(X, Y, testX, testY)
 
 """
 View the cost as a function of iteration #
 """
-plt.plot(T.J)
+plt.plot(T.J, label='Training data error')
+plt.plot(T.testJ, label='Testing data error')
 plt.grid(True)
 plt.ylabel('Cost')
 plt.xlabel('Number of iterations')
+plt.legend()
 plt.show()
 print("After training, the gradient vector is: {}."
       .format(NN.costFunctionPrime(X, Y)))
@@ -84,13 +104,12 @@ print("Finished.")
 """
 Examine results in contour plot
 """
-print(hoursStudy.shape)
 yy = np.dot(hoursStudy.reshape(100, 1), np.ones((1, 100)))
 xx = np.dot(hoursSleep.reshape(100, 1), np.ones((1, 100))).T
 
 plt.pcolormesh(xx, yy, 100*allOutputs.reshape(100, 100))
 plt.colorbar()
-levels = np.linspace(0, 100, 21)
+levels = np.linspace(0, 100, 11)
 CS = plt.contour(xx, yy, 100*allOutputs.reshape(100, 100), levels=levels, colors='black')
 plt.clabel(CS, inline=True, fontsize=12, colors='black')
 
